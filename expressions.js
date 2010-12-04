@@ -60,7 +60,7 @@ var filters = [
   {
     name: "Stacie Hall",
     query: "(((#staciehall OR staciehall) OR @staciehall) OR (hall AND stacie))"
-  } 
+  }, 
 ];
 
 function parse(query) {
@@ -68,53 +68,70 @@ function parse(query) {
 }
 
 function expr() {
-  //console.log('expr', JSON.stringify(this));
   return this.chainl1(term, disjunction);
 }
 
 function term() {
-  //console.log('term', JSON.stringify(this));
   return this.chainl1(factor, conjunction);
 }
 
 function factor() {
-  //console.log('factor', JSON.stringify(this));
-  return this.choice(group, word);
+  return this.choice(group, /*phrase,*/ word);
 }
 
 function group() {
-  //console.log('group', JSON.stringify(this));
   return this.between(/^\(/, /^\)/, expr);
 }
 
+/*function phrase() {
+  return this.between(/^\"/, /^\"/, words);
+}
+
+function words() {
+  return this.many1(word).join(' ');
+} */
+
 function word() {
-  //console.log('word', JSON.stringify(this));
   return this.match(/^[#@_\w\d]+/).toString();
 }
 
 function conjunction() {
-  //console.log('conjunction', JSON.stringify(this));
-  return OPS[this.match(/^AND/)];
+  return OPTREES[this.match(/^AND/)];
 }
 
 function disjunction() {
-  //console.log('disjunction', JSON.stringify(this));
-  return OPS[this.match(/^OR/)];
+  return OPTREES[this.match(/^OR/)];
 }
 
-var OPS = {
+var OPTREES = {
   'AND': function(a,b) { return [ 'AND', a, b ] },
   'OR': function(a,b) { return [ 'OR', a, b ] }
 };
 
+function evalTree(tree, text) {
+  if (!Array.isArray(tree)) {
+    return text.toLowerCase().indexOf(tree.toLowerCase()) >= 0;
+  }
+  var op = tree.shift();
+  switch(op) {
+    case 'OR':
+      return evalTree(tree[0], text) || evalTree(tree[1], text);
+      break;
+    case 'AND':
+      return evalTree(tree[0], text) && evalTree(tree[1], text);
+      break;
+    default:
+      return text.toLowerCase().indexOf(op.toLowerCase()) >= 0;
+      break;
+  }  
+}
+
 filters.forEach(function(filter) {
-  //try {
-    console.log(filter.name);
-    console.log(filter.query);
-    console.log(JSON.stringify(parse(filter.query)));
-  //}
-  //catch(e) {
-    //console.error(e);
-  //}
+  filter.tree = parse(filter.query);
+  console.log(filter.name);
+  console.log(filter.query);
+  console.log(filter.tree);
+  console.log(evalTree(filter.tree, "#staciehall"))
 });
+
 
