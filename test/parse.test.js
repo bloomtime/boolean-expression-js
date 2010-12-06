@@ -6,6 +6,15 @@ module.exports = {
     'test parse simplest': function(){
         assert.deepEqual(parse("foo"), "foo");
     },
+    'test parse (simplest)': function(){
+        assert.deepEqual(parse("(foo)"), "foo");
+    },
+/*    'test parse not': function() {
+        assert.deepEqual(parse("NOT foo"), [ "NOT", "foo" ]);
+    },
+    'test parse (not)': function() {
+        assert.deepEqual(parse("NOT (foo)"), [ "NOT", "foo" ]);
+    },*/
     'test parse simple dis': function(){
         assert.deepEqual(parse("foo OR bar"), [ "OR", "foo", "bar" ]);
     },
@@ -26,6 +35,11 @@ module.exports = {
     },
     'test parse complex parens': function(){
         var parsed = parse("(foo OR bar) AND baz");
+        var expected = [ "AND", [ "OR", "foo", "bar" ], "baz" ];
+        assert.deepEqual(parsed, expected);
+    },
+    'test parse complex (parens)': function(){
+        var parsed = parse("((((foo) OR (bar)) AND (baz)))");
         var expected = [ "AND", [ "OR", "foo", "bar" ], "baz" ];
         assert.deepEqual(parsed, expected);
     },
