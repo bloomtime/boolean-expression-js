@@ -6,9 +6,18 @@ module.exports = {
     'test parse simplest': function(){
         assert.deepEqual(parse("foo"), "foo");
     },
+    'test parse phrase': function(){
+        assert.deepEqual(parse("\"foo bar\""), "foo bar");
+    },
     'test parse (simplest)': function(){
         assert.deepEqual(parse("(foo)"), "foo");
     },
+    'test parse ("phrase")': function(){
+        assert.deepEqual(parse("(\"foo bar\")"), "foo bar");
+    },
+/*    'test parse "(phrase)"': function(){
+        assert.deepEqual(parse("\"(foo bar)\""), "(foo bar)");
+    },*/
     'test parse not': function() {
         assert.deepEqual(parse("NOT foo"), [ "NOT", "foo" ]);
     },
@@ -61,6 +70,16 @@ module.exports = {
         var expected = [ "AND", [ "OR", "foo", "bar" ], "baz" ];
         assert.deepEqual(parsed, expected);
     },
+    'test parse dis phrase': function(){
+        var parsed = parse("\"foo bar\" OR baz");
+        var expected = [ "OR", "foo bar", "baz" ];
+        assert.deepEqual(parsed, expected);
+    },
+    'test parse con phrase': function(){
+        var parsed = parse("\"foo bar\" AND baz");
+        var expected = [ "AND", "foo bar", "baz" ];
+        assert.deepEqual(parsed, expected);
+    },
     'test parse complex (parens)': function(){
         var parsed = parse("((((foo) OR (bar)) AND (baz)))");
         var expected = [ "AND", [ "OR", "foo", "bar" ], "baz" ];
@@ -74,6 +93,21 @@ module.exports = {
     'test parse complex prec2': function(){
         var parsed = parse("bar AND baz OR foo");
         var expected = [ "OR", [ "AND", "bar", "baz" ], "foo" ];
+        assert.deepEqual(parsed, expected);
+    },
+    'test parse phrase not': function(){
+        var parsed = parse("(not \"foo bar\") and \"spam ham eggs\"");
+        var expected = [ "AND", [ "NOT", "foo bar" ], "spam ham eggs" ];
+        assert.deepEqual(parsed, expected);
+    },
+    'test parse phrase con': function(){
+        var parsed = parse("\"foo bar\" and \"spam ham eggs\"");
+        var expected = [ "AND", "foo bar", "spam ham eggs" ];
+        assert.deepEqual(parsed, expected);
+    },
+    'test parse phrase dis': function(){
+        var parsed = parse("\"foo bar\" or \"spam ham eggs\"");
+        var expected = [ "OR", "foo bar", "spam ham eggs" ];
         assert.deepEqual(parsed, expected);
     },
     'test parse complex nested': function(){
