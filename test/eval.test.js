@@ -7,6 +7,12 @@ module.exports = {
     'test evalTree simplest': function(){
         assert.equal(evalTree(parse("foo"), "foo"), true);
     },
+    'test evalTree simplest not': function(){
+        assert.equal(evalTree(parse("not foo"), "foo"), false);
+    },
+    'test evalTree simplest not not': function(){
+        assert.equal(evalTree(parse("not not foo"), "foo"), true);
+    },
     'test evalTree simple dis': function(){
         var parsed = parse("foo OR bar");
         assert.equal(evalTree(parsed, "foo"), true);
@@ -120,6 +126,32 @@ module.exports = {
         assert.equal(evalTree(parsed, "bar ham"), false);
         assert.equal(evalTree(parsed, "baz spam"), false);
     },
+    'test evalTree complex nested3 not': function(){
+        var parsed = parse("(bar AND NOT baz) OR (spam AND ham AND eggs)");
+        assert.equal(evalTree(parsed, "bar"), true);
+        assert.equal(evalTree(parsed, "baz"), false);
+        assert.equal(evalTree(parsed, "spam"), false);
+        assert.equal(evalTree(parsed, "ham"), false);
+        assert.equal(evalTree(parsed, "eggs"), false);
+        assert.equal(evalTree(parsed, "bar baz"), false);
+        assert.equal(evalTree(parsed, "baz bar"), false);
+        assert.equal(evalTree(parsed, "spam ham"), false);
+        assert.equal(evalTree(parsed, "ham spam"), false);
+        assert.equal(evalTree(parsed, "ham eggs"), false);
+        assert.equal(evalTree(parsed, "spam eggs"), false);
+        assert.equal(evalTree(parsed, "spam ham eggs"), true);
+        assert.equal(evalTree(parsed, "ham spam eggs"), true);
+        assert.equal(evalTree(parsed, "spam eggs ham"), true);
+        assert.equal(evalTree(parsed, "ham eggs spam"), true);
+        assert.equal(evalTree(parsed, "eggs spam ham"), true);
+        assert.equal(evalTree(parsed, "eggs ham spam"), true);
+        assert.equal(evalTree(parsed, "baz ham"), false);
+        assert.equal(evalTree(parsed, "baz eggs"), false);
+        assert.equal(evalTree(parsed, "baz spam"), false);
+        assert.equal(evalTree(parsed, "bar ham"), true);
+        assert.equal(evalTree(parsed, "bar eggs"), true);
+        assert.equal(evalTree(parsed, "bar spam"), true);
+    },
     'test evalTree complex nested3': function(){
         var parsed = parse("(bar AND baz) OR (spam AND ham AND eggs)");
         assert.equal(evalTree(parsed, "bar"), false);
@@ -145,6 +177,33 @@ module.exports = {
         assert.equal(evalTree(parsed, "bar ham"), false);
         assert.equal(evalTree(parsed, "bar eggs"), false);
         assert.equal(evalTree(parsed, "bar spam"), false);
+    },
+    'test evalTree complex nested4 not': function(){
+        var parsed = parse("not (foo OR (bar AND baz) OR (spam AND ham AND eggs))");
+        assert.equal(evalTree(parsed, "foo"), false);
+        assert.equal(evalTree(parsed, "bar"), true);
+        assert.equal(evalTree(parsed, "baz"), true);
+        assert.equal(evalTree(parsed, "spam"), true);
+        assert.equal(evalTree(parsed, "ham"), true);
+        assert.equal(evalTree(parsed, "eggs"), true);
+        assert.equal(evalTree(parsed, "bar baz"), false);
+        assert.equal(evalTree(parsed, "baz bar"), false);
+        assert.equal(evalTree(parsed, "spam ham"), true);
+        assert.equal(evalTree(parsed, "ham spam"), true);
+        assert.equal(evalTree(parsed, "ham eggs"), true);
+        assert.equal(evalTree(parsed, "spam eggs"), true);
+        assert.equal(evalTree(parsed, "spam ham eggs"), false);
+        assert.equal(evalTree(parsed, "ham spam eggs"), false);
+        assert.equal(evalTree(parsed, "spam eggs ham"), false);
+        assert.equal(evalTree(parsed, "ham eggs spam"), false);
+        assert.equal(evalTree(parsed, "eggs spam ham"), false);
+        assert.equal(evalTree(parsed, "eggs ham spam"), false);
+        assert.equal(evalTree(parsed, "baz ham"), true);
+        assert.equal(evalTree(parsed, "baz eggs"), true);
+        assert.equal(evalTree(parsed, "baz spam"), true);
+        assert.equal(evalTree(parsed, "bar ham"), true);
+        assert.equal(evalTree(parsed, "bar eggs"), true);
+        assert.equal(evalTree(parsed, "bar spam"), true);
     },
     'test evalTree complex nested4': function(){
         var parsed = parse("(foo OR (bar AND baz) OR (spam AND ham AND eggs))");

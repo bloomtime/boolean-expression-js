@@ -12,6 +12,9 @@ module.exports = {
     'test parse not': function() {
         assert.deepEqual(parse("NOT foo"), [ "NOT", "foo" ]);
     },
+    'test parse not not': function() {
+        assert.deepEqual(parse("NOT NOT foo"), [ "NOT", [ "NOT", "foo" ] ]);
+    },
     'test parse (not)': function() {
         assert.deepEqual(parse("NOT (foo)"), [ "NOT", "foo" ]);
     },
