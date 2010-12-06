@@ -9,20 +9,40 @@ module.exports = {
     'test parse (simplest)': function(){
         assert.deepEqual(parse("(foo)"), "foo");
     },
-/*    'test parse not': function() {
+    'test parse not': function() {
         assert.deepEqual(parse("NOT foo"), [ "NOT", "foo" ]);
     },
     'test parse (not)': function() {
         assert.deepEqual(parse("NOT (foo)"), [ "NOT", "foo" ]);
-    },*/
+    },
     'test parse simple dis': function(){
         assert.deepEqual(parse("foo OR bar"), [ "OR", "foo", "bar" ]);
+    },
+    'test parse simple not dis': function(){
+        var parsed = parse("NOT (foo OR bar)");
+        var expected = [ "NOT", [ "OR", "foo", "bar" ] ];
+        assert.deepEqual(parsed, expected);
+    },
+    'test parse simple not dis lower': function(){
+        var parsed = parse("not (foo OR bar)");
+        var expected = [ "NOT", [ "OR", "foo", "bar" ] ];
+        assert.deepEqual(parsed, expected);
     },
     'test parse simple dis lower': function(){
         assert.deepEqual(parse("foo or bar"), [ "OR", "foo", "bar" ]);
     },
     'test parse simple con': function(){
         assert.deepEqual(parse("foo AND bar"), [ "AND", "foo", "bar" ]);
+    },
+    'test parse simple not con': function(){
+        var parsed = parse("NOT (foo AND bar)");
+        var expected = [ "NOT", [ "AND", "foo", "bar" ] ];
+        assert.deepEqual(parsed, expected);
+    },
+    'test parse simple not con lower': function(){
+        var parsed = parse("not (foo AND bar)");
+        var expected = [ "NOT", [ "AND", "foo", "bar" ] ];
+        assert.deepEqual(parsed, expected);
     },
     'test parse simple con lower': function(){
         assert.deepEqual(parse("foo and bar"), [ "AND", "foo", "bar" ]);
