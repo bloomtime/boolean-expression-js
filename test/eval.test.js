@@ -6,12 +6,30 @@ var assert = require('assert'), // expresso
 module.exports = {
     'test evalTree simplest': function(){
         assert.equal(evalTree(parse("foo"), "foo"), true);
+        assert.equal(evalTree(parse("foo"), "bar"), false);
     },
     'test evalTree simplest not': function(){
         assert.equal(evalTree(parse("not foo"), "foo"), false);
+        assert.equal(evalTree(parse("not foo"), "bar"), true);
     },
     'test evalTree simplest not not': function(){
         assert.equal(evalTree(parse("not not foo"), "foo"), true);
+        assert.equal(evalTree(parse("not not foo"), "bar"), false);
+    },
+    'test evalTree not phrase': function(){
+        assert.equal(evalTree(parse("\"not bar\""), "not bar"), true);
+        assert.equal(evalTree(parse("\"not bar\""), "baz not bar"), true);
+        assert.equal(evalTree(parse("\"not bar\""), "not bar baz"), true);
+    },
+    'test evalTree not not phrase': function(){
+        assert.equal(evalTree(parse("not \"not bar\""), "not bar"), false);
+        assert.equal(evalTree(parse("not \"not bar\""), "baz not bar"), false);
+        assert.equal(evalTree(parse("not \"not bar\""), "not bar baz"), false);
+    },
+    'test evalTree phrase': function(){
+        assert.equal(evalTree(parse("\"foo bar\""), "foo bar"), true);
+        assert.equal(evalTree(parse("\"foo bar\""), "baz foo bar"), true);
+        assert.equal(evalTree(parse("\"foo bar\""), "foo bar baz"), true);
     },
     'test evalTree simple dis': function(){
         var parsed = parse("foo OR bar");
@@ -101,6 +119,14 @@ module.exports = {
         assert.equal(evalTree(parsed, "foo baz"), true);
         assert.equal(evalTree(parsed, "baz"), false);
         assert.equal(evalTree(parsed, "bar"), false);
+    },
+    'test evalTree prec3': function() {
+        var parsed = parse("not foo or bar");
+        var parsed2 = parse("(not foo) or bar");
+        assert.deepEqual(parsed, parsed2);
+        assert.equal(evalTree(parsed, "foo"), false);
+        assert.equal(evalTree(parsed, "bar"), true);
+        assert.equal(evalTree(parsed, "baz"), true);
     },
     'test evalTree complex nested': function(){
         var parsed = parse("(foo OR (bar AND baz))");

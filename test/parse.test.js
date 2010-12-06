@@ -95,6 +95,13 @@ module.exports = {
         var expected = [ "OR", [ "AND", "bar", "baz" ], "foo" ];
         assert.deepEqual(parsed, expected);
     },
+    'test parse prec3': function() {
+        var expected = [ "OR", [ "NOT", "foo" ], "bar" ];
+        var parsed = parse("not foo OR bar");
+        assert.deepEqual(parsed, expected);
+        var parsed2 = parse("(not foo) OR bar");
+        assert.deepEqual(parsed2, expected);
+    },
     'test parse phrase not': function(){
         var parsed = parse("(not \"foo bar\") and \"spam ham eggs\"");
         var expected = [ "AND", [ "NOT", "foo bar" ], "spam ham eggs" ];
