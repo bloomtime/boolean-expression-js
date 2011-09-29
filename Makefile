@@ -1,9 +1,6 @@
-all: test coverage
+all: test 
 
 test:
-	./node_modules/expresso/bin/expresso -I lib test/*
+	./node_modules/expresso/bin/expresso test/*
 
-coverage:
-	./node_modules/expresso/bin/expresso -I lib --cov test/*
-
-.PHONY: test coverage
+.PHONY: test 

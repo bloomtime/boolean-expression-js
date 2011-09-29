@@ -3,6 +3,7 @@
   "name": "expression",
   "description": "a simple boolean expression engine using reparse",
   "version": "0.0.0",
+  "main": "expression.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/bloomtime/expression-js.git"

@@ -1,5 +1,5 @@
 var assert = require('assert'), // expresso
-    Expression = require('expression');
+    Expression = require('../expression');
 
 module.exports = {
     'test parse simplest': function(){
