@@ -12,13 +12,13 @@ module.exports = {
         assert.deepEqual(new Expression("not not foo").flatten(), [ "foo" ]);
     },
     'test flattenTree not phrase': function(){
-        assert.deepEqual(new Expression("\"not bar\"").flatten(), [ "not", "bar" ]);
+        assert.deepEqual(new Expression("\"not bar\"").flatten(), [ "not bar" ]);
     },
     'test flattenTree not not phrase': function(){
         assert.deepEqual(new Expression("not \"not bar\"").flatten(), []);
     },
     'test flattenTree phrase': function(){
-        assert.deepEqual(new Expression("\"foo bar\"").flatten(), [ "foo", "bar" ]);
+        assert.deepEqual(new Expression("\"foo bar\"").flatten(), [ "foo bar" ]);
     },
     'test flattenTree simple dis': function(){
         var parsed = new Expression("foo OR bar");

@@ -1,0 +1,19 @@
+{
+  "author": "Tom Carden <tom@bloom.io>",
+  "name": "expression",
+  "description": "a simple boolean expression engine using reparse",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bloomtime/expression-js.git"
+  },
+  "engines": {
+    "node": "~0.4.2"
+  },
+  "devDependencies": {
+    "expresso":"~0.9.0" 
+  },
+  "dependencies": {
+    "reparse": "~0.1.2"
+  }
+}
