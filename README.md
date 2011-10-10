@@ -1,6 +1,6 @@
 Uses https://github.com/weaver/ReParse
 
-Compiles and evaluated simple boolean search expressions, e.g.
+Compiles and evaluates simple boolean search expressions, e.g.
 
 ```javascript
 var parsed = new Expression("John AND Paul AND Ringo AND George");
