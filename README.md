@@ -17,6 +17,7 @@ Supports parens for disambiguation. Supports AND, OR and NOT. Supports quotes fo
 See tests for more examples.
 
 TODO:
+
 * allow domain names and other punctuation in terms
 * flatten quoted terms
 * more Googley searching (implied AND, negation with -, etc.)
