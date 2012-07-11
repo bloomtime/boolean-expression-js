@@ -9,7 +9,7 @@
     "url": "git://github.com/bloomtime/expression-js.git"
   },
   "engines": {
-    "node": "~0.4.2"
+    "node": ">=0.4.2"
   },
   "devDependencies": {
     "expresso":"~0.9.0" 
